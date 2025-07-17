@@ -1,6 +1,7 @@
 import public.public_api as public
 import internal.internal_api as internal
 import internal.conversions_api as conversions
+import internal.onboarding as onboarding
 import time
 import json
 import os
@@ -57,8 +58,8 @@ def main():
     #internal_conversion_quote(env_url, key, secret, True, "1", "", "eth", "ars")
     #internal_conversion_quote(env_url, key, secret, "", "3919790.00", "eth", "ars")
 
-    #internal.get_terms(env_url, key, secret, ["CO"])
-    #internal.accept_terms(env_url, key, secret, ["CO"], '0', '0', '0')
+    #onboarding.get_terms(env_url, key, secret, ["CO"])
+    #onboarding.accept_terms(env_url, key, secret, ["CO"], '0', '0', '0')
     #internal.combined_balance(env_url, key, secret)
     #conversion_execution(env_url, key, secret)
     #placing_multiple_conversions(env_url, key, secret, 45)
