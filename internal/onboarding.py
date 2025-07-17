@@ -1,50 +1,120 @@
-import http_utils
+from typing import List, Optional
+from requests.exceptions import RequestException
+from bitso_client import BitsoClient
 
-def get_terms(url, key, secret, jurisdictions = [], include_text='0', markdown='0'):
-    request_path = "/api/v3/terms"
+class Onboarding:
+    """Static methods for handling Bitso onboarding-related API endpoints"""
 
-    if jurisdictions:
-        juridictions_url = ','.join(jurisdictions)
-        request_path = request_path + "/" + juridictions_url
+    @staticmethod
+    def get_terms(client: BitsoClient, jurisdictions: Optional[List[str]] = None, 
+                 include_text: str = '0', markdown: str = '0') -> dict:
+        """
+        Get terms and conditions for specified jurisdictions
+        
+        Args:
+            client: Configured BitsoClient instance
+            jurisdictions: List of jurisdiction codes (e.g., ["MX", "CO"])
+            include_text: Whether to include full text ('0' or '1')
+            markdown: Whether to return text in markdown format ('0' or '1')
+        
+        Returns:
+            Dictionary containing terms information
+        
+        Raises:
+            RequestException: If the API request fails
+        """
+        request_path = "/api/v3/terms"
 
-    if include_text != '0':
-        request_path = request_path + "?include_text=" + include_text
+        # Build path with jurisdictions if provided
+        if jurisdictions:
+            jurisdictions_url = ','.join(jurisdictions)
+            request_path = f"{request_path}/{jurisdictions_url}"
 
-    if markdown != '0':
-        query_param_add_symbol = "?"
-        if '?' in request_path:
-            query_param_add_symbol = "&"
-        request_path = request_path + query_param_add_symbol + "markdown=" + markdown
+        # Add query parameters if needed
+        params = []
+        if include_text != '0':
+            params.append(f"include_text={include_text}")
+        if markdown != '0':
+            params.append(f"markdown={markdown}")
+        
+        if params:
+            request_path = f"{request_path}?{'&'.join(params)}"
 
-    print("Request path: " + request_path)
-    response = http_utils.get(url, request_path, key, secret)
-    print(response)
-    print(response.content)
+        try:
+            response = client.get(request_path)
+            return response.json()
+        except RequestException as e:
+            print(f"Error getting terms: {e}")
+            raise
 
-def accept_terms(url, key, secret,
-    jurisdictions = [], include_text='0', markdown='0',
-    agree_to_terms='0', password = ''):
-    request_path = "/api/v3/terms"
+    @staticmethod
+    def accept_terms(client: BitsoClient, jurisdictions: List[str], include_text: str = '0', 
+                    markdown: str = '0', agree_to_terms: bool = False, 
+                    password: Optional[str] = None) -> dict:
+        """
+        Accept terms and conditions for specified jurisdictions
+        
+        Args:
+            client: Configured BitsoClient instance
+            jurisdictions: List of jurisdiction codes (e.g., ["MX", "CO"])
+            include_text: Whether to include full text ('0' or '1')
+            markdown: Whether to return text in markdown format ('0' or '1')
+            agree_to_terms: Whether user agrees to terms (True/False)
+            password: Optional password for confirmation
+        
+        Returns:
+            Dictionary containing acceptance response
+            
+        Raises:
+            RequestException: If the API request fails
+        """
+        request_path = "/api/v3/terms"
 
-    if jurisdictions:
-        juridictions_url = ','.join(jurisdictions)
-        request_path = request_path + "/" + juridictions_url
+        # Build path with jurisdictions
+        if jurisdictions:
+            jurisdictions_url = ','.join(jurisdictions)
+            request_path = f"{request_path}/{jurisdictions_url}"
 
-    if include_text != '0':
-        request_path = request_path + "?include_text=" + include_text
+        # Add query parameters if needed
+        params = []
+        if include_text != '0':
+            params.append(f"include_text={include_text}")
+        if markdown != '0':
+            params.append(f"markdown={markdown}")
+        
+        if params:
+            request_path = f"{request_path}?{'&'.join(params)}"
 
-    if markdown != '0':
-        query_param_add_symbol = "?"
-        if '?' in request_path:
-            query_param_add_symbol = "&"
-        request_path = request_path + query_param_add_symbol + "markdown=" + markdown
+        # Prepare payload
+        payload = {"agree_to_terms": 1 if agree_to_terms else 0}
+        if password:
+            payload["password"] = password
 
-    payload = {
-        'agree_to_terms': 1
-    }
+        try:
+            response = client.post(request_path, payload)
+            return response.json()
+        except RequestException as e:
+            print(f"Error accepting terms: {e}")
+            raise
 
-    if password:
-        payload['password'] = password
+# Example usage:
+"""
+client = BitsoClient(
+    base_url="https://api.bitso.com",
+    api_key="your_key",
+    api_secret="your_secret"
+)
 
-    response = http_utils.post(url, request_path, key, secret, payload)
-    print(response.content)
+# Get terms
+terms = Onboarding.get_terms(client, jurisdictions=["CO"])
+print(terms)
+
+# Accept terms
+result = Onboarding.accept_terms(
+    client,
+    jurisdictions=["CO"],
+    agree_to_terms=True,
+    password='optional_password'
+)
+print(result)
+"""
