@@ -1,0 +1,35 @@
+{
+    "environments": {
+        "local_host": "http://localhost:8080",
+        "local": "http://bitso.lan",
+        "dev": "https://dev.bitso.com",
+        "stage": "https://stage.bitso.com",
+        "prod": "https://api.bitso.com"
+    },
+    "credentials": {
+        "stage": {
+            "lvl_1": {
+                "key": "YOUR_KEY_HERE",
+                "secret": "YOUR_SECRET_HERE"
+            },
+            "user_id": {
+                "key": "YOUR_KEY_HERE",
+                "secret": "YOUR_SECRET_HERE",
+                "level": 1
+            }
+        },
+        "dev": {
+            "user_id": {
+                "key": "YOUR_KEY_HERE",
+                "secret": "YOUR_SECRET_HERE",
+                "level": 1
+            }
+        },
+        "prod": {
+            "user_id": {
+                "key": "YOUR_KEY_HERE",
+                "secret": "YOUR_SECRET_HERE"
+            }
+        }
+    }
+} 

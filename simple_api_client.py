@@ -2,6 +2,19 @@ import public.public_api as public
 import internal.internal_api as internal
 import internal.conversions_api as conversions
 import time
+import json
+import os
+
+def load_config():
+    """Load configuration from config.json file"""
+    config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(
+            "config.json not found. Please copy config.template.json to config.json and fill in your credentials."
+        )
+    
+    with open(config_path, 'r') as f:
+        return json.load(f)
 
 def placing_multiple_conversions(env_url, key, secret, required_conversions):
     print("Placing multiple conversion starting...")
@@ -22,39 +35,21 @@ def conversion_execution(env_url, key, secret):
     #print("Conversion execution completed")
 
 def main():
-
-    environments = {
-        "local_host": "http://localhost:8080",
-        "local" : "http://bitso.lan",
-        "dev" : "https://dev.bitso.com",
-        "stage" : "https://stage.bitso.com",
-        "prod": "https://api.bitso.com"
-    }
-
-    credentials = {}
-
-    simple_path = False
-    #simple_path = True
-
-    #required_env = "local_host"
-    #required_env = "dev"
-    required_env = "stage"
-    #required_env = "prod"
-
-    #userId = 45930
-    #userId = 234237
-    # STAGE
-    #userId = 28
-    userId = 63631
-
-    env_url = environments[required_env]
-    api = credentials[required_env][userId]
+    # Load configuration
+    config = load_config()
+    
+    # Set environment
+    required_env = ""  # Change this to switch environments
+    userId = ""      # Change this to switch users
+    
+    # Get environment URL and credentials
+    env_url = config["environments"][required_env]
+    api = config["credentials"][required_env][userId]
     key = api["key"]
     secret = api["secret"]
 
-
     #public_auth_place_order(env_url, key, secret, "btc_mxn", "sell", "limit", 1, "", 400000)
-    #public.account_status(env_url, key, secret)
+    public.account_status(env_url, key, secret)
     #public.catalogues(env_url, key, secret)
     #public_withdrawal_methods(env_url, key, secret, "mxn")
     #internal_terms(env_url, key, secret, simple_path, ["MX"])
@@ -66,7 +61,7 @@ def main():
     #internal.accept_terms(env_url, key, secret, ["CO"], '0', '0', '0')
     #internal.combined_balance(env_url, key, secret)
     #conversion_execution(env_url, key, secret)
-    placing_multiple_conversions(env_url, key, secret, 45)
+    #placing_multiple_conversions(env_url, key, secret, 45)
 
 if __name__ == "__main__":
    main()
