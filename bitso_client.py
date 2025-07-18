@@ -52,6 +52,13 @@ class BitsoClient:
             self._timeout = timeout
             self._enable_key_rotation = enable_key_rotation
             
+            # Create session for connection pooling and reuse
+            self._session = requests.Session()
+            self._session.headers.update({
+                "User-Agent": "vicco-local-python",
+                "Content-Type": "application/json",
+            })
+            
             # Handle single API key (current behavior)
             if isinstance(api, dict):
                 self._api_keys = [{"key": api["key"], "secret": api["secret"]}]
@@ -211,7 +218,8 @@ class BitsoClient:
             headers = self._build_headers(path, method, json_payload)
 
             try:
-                response = requests.request(
+                # Use session for better performance and connection reuse
+                response = self._session.request(
                     method=method,
                     url=url,
                     headers=headers,
@@ -257,7 +265,7 @@ class BitsoClient:
 
     def get(self, path: str, max_retries: int = 1) -> Any:
         """Make a GET request with automatic response parsing and error handling"""
-        return self._make_request("GET", path, None, max_retries)
+        return self._make_request("GET", path, max_retries=max_retries)
 
     def post(self, path: str, payload: Dict[str, Any], max_retries: int = 1) -> Any:
         """Make a POST request with automatic response parsing and error handling"""

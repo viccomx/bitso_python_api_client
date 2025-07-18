@@ -29,23 +29,23 @@ def conversion_execution(client: BitsoClient) -> None:
         client: BitsoClient instance
     """
     #print("Conversion execution starting...")
-    temperonal_convesion_id = conversions.request_quote_v4(
-        client.base_url, 
-        client.api_key, 
-        client.api_secret, 
-        "50", "", "mxn", "pepe"
-    )
+    # temperonal_convesion_id = conversions.request_quote_v4(
+    #     client.base_url, 
+    #     client.api_key, 
+    #     client.api_secret, 
+    #     "50", "", "mxn", "pepe"
+    # )
     
-    if temperonal_convesion_id is None:
-        print("Error: Failed to get conversion quote")
-        return
+    # if temperonal_convesion_id is None:
+    #     print("Error: Failed to get conversion quote")
+    #     return
     
-    conversions.execute_quote_v4(
-        client.base_url,
-        client.api_key,
-        client.api_secret,
-        temperonal_convesion_id
-    )
+    # conversions.execute_quote_v4(
+    #     client.base_url,
+    #     client.api_key,
+    #     client.api_secret,
+    #     temperonal_convesion_id
+    # )
     #print("Conversion execution completed")
 
 def main() -> None:
@@ -54,7 +54,8 @@ def main() -> None:
         # Create BitsoClient instance
         client = BitsoClient(
             env="stage",      # Change this to switch environments
-            user_id="28" # Change this to switch users
+            user_id="28",     # Change this to switch users
+            timeout=10        # Reduced timeout for faster processing
         )
 
         #public.account_status(client)

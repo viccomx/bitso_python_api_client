@@ -12,8 +12,8 @@ class Onboarding:
 
     @staticmethod
     def testing_terms_migration(client: BitsoClient):
-        num_threads = 5
-        required_iterations = 500
+        num_threads = 15  # Increased from 5 to 15
+        required_iterations = 1200
         
         start_time = datetime.datetime.now()
         print(f"Getting multiple terms starting at {start_time.strftime('%Y-%m-%d %H:%M:%S')} with {num_threads} threads...")
@@ -44,6 +44,8 @@ class Onboarding:
         print(f"Duration: {duration.total_seconds():.2f} seconds")
         print(f"Successful requests: {successful_requests}/{required_iterations}")
         print(f"Average time per request: {duration.total_seconds()/required_iterations:.3f} seconds")
+        print(f"Requests per second: {successful_requests/duration.total_seconds():.2f}")
+        print(f"Requests per 10 seconds: {(successful_requests/duration.total_seconds())*10:.2f}")
 
     @staticmethod
     def testing_terms_migration_with_rotation(env: str, user_id: str):
