@@ -4,7 +4,7 @@
         "local": "http://bitso.lan",
         "dev": "https://dev.bitso.com",
         "stage": "https://stage.bitso.com",
-        "prod": "https://api.bitso.com"
+        "prod": "https://bitso.com"
     },
     "credentials": {
         "stage": {
@@ -16,7 +16,21 @@
                 "key": "YOUR_KEY_HERE",
                 "secret": "YOUR_SECRET_HERE",
                 "level": 1
-            }
+            },
+            "user_with_rotation": [
+                {
+                    "key": "YOUR_KEY_1_HERE",
+                    "secret": "YOUR_SECRET_1_HERE"
+                },
+                {
+                    "key": "YOUR_KEY_2_HERE",
+                    "secret": "YOUR_SECRET_2_HERE"
+                },
+                {
+                    "key": "YOUR_KEY_3_HERE",
+                    "secret": "YOUR_SECRET_3_HERE"
+                }
+            ]
         },
         "dev": {
             "user_id": {
