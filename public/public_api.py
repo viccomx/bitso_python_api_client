@@ -1,4 +1,5 @@
 import http_utils
+from bitso_client import BitsoClient
 
 # https://bitso.com/api_info#place-an-order
 def place_order(url, key, secret,
@@ -29,9 +30,9 @@ def place_order(url, key, secret,
     print(response.content)
 
 # https://bitso.com/api_info#account-status
-def account_status(url, key, secret):
+def account_status(client: BitsoClient):
     request_path = "/api/v3/account_status"
-    response = http_utils.get(url, request_path, key, secret)
+    response = client.get(request_path)
     print(response.content)
 
 def catalogues(url, key, secret):

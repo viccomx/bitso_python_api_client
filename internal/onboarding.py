@@ -12,7 +12,7 @@ class Onboarding:
         Get terms and conditions for specified jurisdictions
         
         Args:
-            client: Configured BitsoClient instance
+            client: BitsoClient instance
             jurisdictions: List of jurisdiction codes (e.g., ["MX", "CO"])
             include_text: Whether to include full text ('0' or '1')
             markdown: Whether to return text in markdown format ('0' or '1')
@@ -55,7 +55,7 @@ class Onboarding:
         Accept terms and conditions for specified jurisdictions
         
         Args:
-            client: Configured BitsoClient instance
+            client: BitsoClient instance
             jurisdictions: List of jurisdiction codes (e.g., ["MX", "CO"])
             include_text: Whether to include full text ('0' or '1')
             markdown: Whether to return text in markdown format ('0' or '1')
