@@ -55,7 +55,8 @@ def main() -> None:
         client = BitsoClient(
             env="stage",      # Change this to switch environments
             user_id="28",     # Change this to switch users
-            timeout=10        # Reduced timeout for faster processing
+            timeout=5,        # Reduced timeout for faster processing
+            enable_key_rotation=True
         )
 
         #public.account_status(client)

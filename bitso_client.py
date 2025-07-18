@@ -10,6 +10,7 @@ from requests.exceptions import (
     TooManyRedirects,
     URLRequired
 )
+from requests.adapters import HTTPAdapter
 import bitso_auth
 from config_utils import ConfigUtils
 
@@ -58,6 +59,16 @@ class BitsoClient:
                 "User-Agent": "vicco-local-python",
                 "Content-Type": "application/json",
             })
+            
+            # Configure connection pooling for high performance
+            adapter = HTTPAdapter(
+                pool_connections=20,         # Number of connection pools
+                pool_maxsize=20,             # Max connections per pool
+                max_retries=0,               # Disable retries (we handle them)
+                pool_block=False             # Don't block when pool is full
+            )
+            self._session.mount('http://', adapter)
+            self._session.mount('https://', adapter)
             
             # Handle single API key (current behavior)
             if isinstance(api, dict):

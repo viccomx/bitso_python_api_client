@@ -12,8 +12,8 @@ class Onboarding:
 
     @staticmethod
     def testing_terms_migration(client: BitsoClient):
-        num_threads = 15  # Increased from 5 to 15
-        required_iterations = 1200
+        num_threads = 15
+        required_iterations = 2000  # Increased from 1200 to 2000
         
         start_time = datetime.datetime.now()
         print(f"Getting multiple terms starting at {start_time.strftime('%Y-%m-%d %H:%M:%S')} with {num_threads} threads...")
@@ -21,14 +21,15 @@ class Onboarding:
         def make_terms_request():
             """Function to be executed by each thread"""
             try:
+                #internal_api.get_terms(client, jurisdictions=["GI"])
                 internal_api.get_terms(client)
                 return True
             except Exception as e:
                 print(f"Thread error: {e}")
                 return False
         
-        # Use ThreadPoolExecutor to manage threads
-        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        # Use ThreadPoolExecutor to manage threads with optimized settings
+        with ThreadPoolExecutor(max_workers=num_threads, thread_name_prefix="terms_worker") as executor:
             # Submit all tasks
             futures = [executor.submit(make_terms_request) for _ in range(required_iterations)]
             
