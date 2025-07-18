@@ -53,12 +53,12 @@ def main() -> None:
     try:
         # Create BitsoClient instance
         client = BitsoClient(
-            env="prod",      # Change this to switch environments
-            user_id="234237" # Change this to switch users
+            env="stage",      # Change this to switch environments
+            user_id="28" # Change this to switch users
         )
 
-        # Example API calls
-        public.account_status(client)
+        #public.account_status(client)
+        onboarding.Onboarding.testing_terms_migration(client)
         
         # Commented examples
         """
